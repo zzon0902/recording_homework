@@ -156,18 +156,18 @@ let currentImageIndex = 0;
 const updateImage = () => {
     const currentItem = images[currentImageIndex];
     console.log("Loading image:", currentItem.src); // Debug log
+
     imageElement.src = currentItem.src;
 
-    imageElement.onerror = () => {
-        console.error("Failed to load image:", currentItem.src);
-        imageElement.src = "https://via.placeholder.com/300"; // Fallback
-    };
-
-    // Play the associated audio
-    audioPlayer.src = currentItem.audio;
-    audioPlayer.play().catch(error => {
-        console.error("Audio playback failed:", error);
-    });
+    // Check if audio exists before attempting to play
+    if (currentItem.audio) {
+        audioPlayer.src = currentItem.audio;
+        audioPlayer.play().catch(error => {
+            console.error("Audio playback failed:", error);
+        });
+    } else {
+        console.log("No audio for this image."); // Debug log
+    }
 
     // Update navigation buttons
     prevButton.disabled = currentImageIndex === 0;
